@@ -63,3 +63,5 @@ NodejsMongodbLog.js负责处理网页请求和响应请求
 12.28 update query model ver2.0
 
 12.28 update manager model ver 3.0
+
+12.28 update delet model ver 4.0

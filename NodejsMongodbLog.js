@@ -147,6 +147,53 @@ app.get("/input",(req,res)=>{
 
         
     }
+
+    if(req.query.submit1 == '删除'){
+        console.log("shanchu")
+        if(req.query.bookname==""){
+            console.log("weishuru")
+            ejs.renderFile("public/query.html",{returnval:"删除信息不能为空"},(err,str)=>{
+                res.send(str)
+            });
+        }
+        else{
+            bookdata.find({bookname:req.query.bookname},(err,data)=>{
+                //删除信息权限判断
+                if(req.session.status == 0){
+                    ejs.renderFile("public/query.html",{returnval:"没有管理员权限"},(err,str)=>{
+                        res.send(str)
+                    });
+                }
+                
+                else{
+                    if(data == 0){
+                        console.log(data)
+                        console.log("shanchushibai")
+
+                        ejs.renderFile("public/query.html",{returnval:"书名不存在"},(err,str)=>{
+                            res.send(str)
+                        });
+                        
+                    }
+                    else
+                    {
+                        console.log("shumingyicunzai");
+                        bookdata.remove({bookname:req.query.bookname},(err)=>{
+                            console.log(err)
+                        });
+                        ejs.renderFile("public/query.html",{returnval:"删除成功"},(err,str)=>{
+                            res.send(str)
+                        });
+                    }
+                }
+                //添加信息存在性判断
+                
+            })
+            
+        }
+
+        
+    }
     if(req.query.submit1 == '查询'){
         
         bookdata.find({bookname:req.query.bookname},(err,data)=>{
