@@ -9,7 +9,13 @@ const schema={
     username:String,
     userpwd:String,
 }
+
+const bookschema={
+    bookname:String,
+    writer:String,
+}
 const mydata = mongoose.model('users',schema);
+const bookdata = mongoose.model('books',bookschema);
 // const kitty = new mydata( { name:'testZildjian2' });
 // kitty.save()
 app.use(session({
@@ -41,7 +47,7 @@ app.get("/input",(req,res)=>{
                 }
                 else{
                     console.log("dengluchenggong")
-                    ejs.renderFile("public/query_bac.html",{returnval:"登陆成功"},(err,str)=>{
+                    ejs.renderFile("public/query.html",{returnval:"登陆成功"},(err,str)=>{
                         res.send(str)
                     });
                 }
@@ -86,10 +92,42 @@ app.get("/input",(req,res)=>{
             })
             
         }
-        
+    
 
+    }
+    if(req.query.submit1 == '添加'){
+        console.log("tianjia")
+        if(req.query.bookname==""||req.query.writer==""){
+            console.log("weishuru")
+            ejs.renderFile("public/query.html",{returnval:"录入信息不能为空"},(err,str)=>{
+                res.send(str)
+            });
+        }
+        else{
+            bookdata.find({bookname:req.query.bookname},(err,data)=>{
+                //判断是否查询成功
+                if(data == 0){
+                    console.log(data)
+                    console.log("charuchenggong")
+                    const book = new bookdata( { bookname:req.query.bookname,writer:req.query.writer});
+                    book.save()
+                    ejs.renderFile("public/query.html",{returnval:"插入成功"},(err,str)=>{
+                        res.send(str)
+                    });
+                    
+                }
+                else
+                {
+                    console.log("shumingyicunzai");
+                    ejs.renderFile("public/query.html",{returnval:"书名已存在"},(err,str)=>{
+                        res.send(str)
+                    });
+                }
+            })
             
+        }
 
+        
     }
 })
 app.listen(10634)
