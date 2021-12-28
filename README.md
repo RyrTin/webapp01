@@ -56,3 +56,6 @@ NodejsMongodbLog.js负责处理网页请求和响应请求
 
 12.28修改文件无法上传到github 搬运项目至webapp01远程库
 
+12.28 update query model
+
+12.28 update query model ver2.0

@@ -31,13 +31,14 @@ app.get("/input",(req,res)=>{
     if(req.query.submit1 == '登陆'){
         
         mydata.find({username:req.query.username},(err,data)=>{
-            //判断是否查询成功
+            //用户存在性判断
             if(data == 0){
                 console.log("yonghubucunzai")
                 ejs.renderFile("public/index_bac.html",{returnval:"用户不存在"},(err,str)=>{
                     res.send(str)
                 });
             }
+            //用户登陆信息判断
             else{
                 if(data[0]._doc.userpwd!=req.query.userpwd){
                     console.log("mimacuowu")
@@ -58,7 +59,7 @@ app.get("/input",(req,res)=>{
     }
 
     if(req.query.submit1 == '注册'){
-        
+        //用户存在性判断
         if(req.query.username==""||req.query.userpwd==""){
             ejs.renderFile("public/reg_bac.html",{returnval:"请输入用户名或密码"},(err,str)=>{
                 res.send(str)
@@ -66,7 +67,7 @@ app.get("/input",(req,res)=>{
         }
         else{
             mydata.find({username:req.query.username},(err,data)=>{
-                //判断是否查询成功
+                //用户注册信息判断
                 if(data == 0){
                     console.log(data)
                     if(req.query.userpwd != req.query.confirmpwd){
@@ -105,7 +106,7 @@ app.get("/input",(req,res)=>{
         }
         else{
             bookdata.find({bookname:req.query.bookname},(err,data)=>{
-                //判断是否查询成功
+                //查询信息存在性判断
                 if(data == 0){
                     console.log(data)
                     console.log("charuchenggong")
@@ -132,7 +133,7 @@ app.get("/input",(req,res)=>{
     if(req.query.submit1 == '查询'){
         
         bookdata.find({bookname:req.query.bookname},(err,data)=>{
-            //判断是否查询成功
+            //查询信息存在性判断
             if(data == 0){
                 console.log("shumingweiluru")
                 ejs.renderFile("public/query_bac.html",{returnval:"书名未录入"},(err,str)=>{
