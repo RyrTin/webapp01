@@ -4,10 +4,11 @@ const ejs = require("ejs")
 const session = require("express-session")
 const app = express()
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/testuser');
+mongoose.connect('mongodb://localhost:27017/testbookuser');
 const schema={
     username:String,
     userpwd:String,
+    status:String,
 }
 
 const bookschema={
@@ -48,6 +49,8 @@ app.get("/input",(req,res)=>{
                 }
                 else{
                     console.log("dengluchenggong")
+                    req.session.status = data[0]._doc.status
+                    console.log(req.session.status)
                     ejs.renderFile("public/query.html",{returnval:"登陆成功"},(err,str)=>{
                         res.send(str)
                     });
@@ -76,7 +79,11 @@ app.get("/input",(req,res)=>{
                         });
                     }
                     else{
-                        const kitty = new mydata( { username:req.query.username,userpwd:req.query.userpwd});
+                        if(req.query.gmcode=='10634')
+                        num = 1;
+                        else
+                        num = 0;
+                        const kitty = new mydata( { username:req.query.username,userpwd:req.query.userpwd,status:num});
                         kitty.save()
                         ejs.renderFile("public/index_bac.html",{returnval:"注册成功"},(err,str)=>{
                         res.send(str)
@@ -106,24 +113,34 @@ app.get("/input",(req,res)=>{
         }
         else{
             bookdata.find({bookname:req.query.bookname},(err,data)=>{
-                //查询信息存在性判断
-                if(data == 0){
-                    console.log(data)
-                    console.log("charuchenggong")
-                    const book = new bookdata( { bookname:req.query.bookname,writer:req.query.writer});
-                    book.save()
-                    ejs.renderFile("public/query.html",{returnval:"插入成功"},(err,str)=>{
-                        res.send(str)
-                    });
-                    
-                }
-                else
-                {
-                    console.log("shumingyicunzai");
-                    ejs.renderFile("public/query.html",{returnval:"书名已存在"},(err,str)=>{
+                //添加信息权限判断
+                if(req.session.status == 0){
+                    ejs.renderFile("public/query.html",{returnval:"没有管理员权限"},(err,str)=>{
                         res.send(str)
                     });
                 }
+                
+                else{
+                    if(data == 0){
+                        console.log(data)
+                        console.log("charuchenggong")
+                        const book = new bookdata( { bookname:req.query.bookname,writer:req.query.writer});
+                        book.save()
+                        ejs.renderFile("public/query.html",{returnval:"插入成功"},(err,str)=>{
+                            res.send(str)
+                        });
+                        
+                    }
+                    else
+                    {
+                        console.log("shumingyicunzai");
+                        ejs.renderFile("public/query.html",{returnval:"书名已存在"},(err,str)=>{
+                            res.send(str)
+                        });
+                    }
+                }
+                //添加信息存在性判断
+                
             })
             
         }

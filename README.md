@@ -44,9 +44,11 @@ NodejsMongodbLog.js负责处理网页请求和响应请求
 
 1.登陆：输入正确用户名密码即可登陆
 
-2.注册：输入未注册用户名及重复登录密码即可注册
+2.注册：输入未注册用户名及重复登录密码即可注册，可通过管理员邀请码成为管理员
 
-3.查询：查询小说信息
+3.插入：插入小说信息，仅管理员可用
+
+4.查询：查询小说信息
 
 
 
@@ -59,3 +61,5 @@ NodejsMongodbLog.js负责处理网页请求和响应请求
 12.28 update query model
 
 12.28 update query model ver2.0
+
+12.28 update manager model ver 3.0
