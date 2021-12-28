@@ -129,6 +129,26 @@ app.get("/input",(req,res)=>{
 
         
     }
+    if(req.query.submit1 == '查询'){
+        
+        bookdata.find({bookname:req.query.bookname},(err,data)=>{
+            //判断是否查询成功
+            if(data == 0){
+                console.log("shumingweiluru")
+                ejs.renderFile("public/query_bac.html",{returnval:"书名未录入"},(err,str)=>{
+                    res.send(str)
+                });
+            }
+            else{
+                console.log("chaxunchenggong")
+                ejs.renderFile("public/query_bac.html",{returnval:"查询结果："+data[0]._doc.writer},(err,str)=>{
+                    res.send(str)
+                });
+            }   
+        })
+    
+
+    }
 })
 app.listen(10634)
 
